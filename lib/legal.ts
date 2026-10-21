@@ -85,7 +85,8 @@ export const legalDocs: Record<string, LegalDoc> = {
       {
         heading: "Processing and delivery",
         body: [
-          "Orders placed before [CUTOFF TIME] on a business day typically ship the same or next business day. Delivery usually takes [X–Y] business days after shipment.",
+          // TODO: confirm the time zone for the 6 PM cutoff.
+          "Orders placed before 6 PM ET on a business day ship the same day. Delivery typically takes 1–3 business days. Orders placed after the cutoff, or on weekends and holidays, ship the next business day.",
           `Standard shipping is a flat $${(site.flatShippingCents / 100).toFixed(2)}. Orders over $${(site.freeShippingThresholdCents / 100).toFixed(0)} ship free.`,
         ],
       },

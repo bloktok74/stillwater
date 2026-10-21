@@ -22,7 +22,10 @@ const faqs = [
     q: "Who can buy from you?",
     a: `Researchers aged ${site.minAge} or older who are purchasing for lawful laboratory research. We may ask for verification before shipping.`,
   },
-  { q: "Where do you ship?", a: `We currently ship within the ${site.shipsTo} only.` },
+  {
+    q: "Where do you ship, and how fast?",
+    a: `We ship within the ${site.shipsTo} only. Orders placed before 6 PM ET on a business day ship the same day, and delivery typically takes 1–3 business days.`,
+  },
   { q: "Can I see a certificate of analysis?", a: `Yes. Email ${site.supportEmail} with the product and lot number and we'll send its COA.` },
 ];
 
