@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/components/CartProvider";
 import { RuoNotice } from "@/components/RuoNotice";
-import { attestations, US_STATES, type AttestationKey, type Customer } from "@/lib/checkout";
+import { site } from "@/config/site";
+import { attestations, paymentLabels, paymentMethods, US_STATES, type AttestationKey, type Customer, type PaymentMethod } from "@/lib/checkout";
 import { formatCents, priceCart } from "@/lib/pricing";
 
 const emptyCustomer: Customer = { name: "", email: "", organization: "", address1: "", address2: "", city: "", state: "", zip: "" };
@@ -16,6 +17,7 @@ export default function CheckoutPage() {
   const cart = priceCart(lines);
   const [customer, setCustomer] = useState(emptyCustomer);
   const [checks, setChecks] = useState<Record<AttestationKey, boolean>>({ age: false, researchOnly: false, noHumanUse: false, terms: false });
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("venmo");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -43,12 +45,13 @@ export default function CheckoutPage() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customer, lines, attestations: checks }),
+        body: JSON.stringify({ customer, lines, attestations: checks, paymentMethod }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Checkout failed.");
       clear();
-      router.push(`/order/confirmed?id=${encodeURIComponent(data.orderId)}`);
+      const q = new URLSearchParams({ id: data.orderId, total: String(data.totalCents), method: data.paymentMethod });
+      router.push(`/order/confirmed?${q}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed.");
       setSubmitting(false);
@@ -104,10 +107,29 @@ export default function CheckoutPage() {
 
           <section>
             <h2 className="text-lg font-semibold">Payment</h2>
-            {/* TODO: mount your payment processor's hosted fields / redirect here. */}
-            <p className="mt-2 rounded-lg border border-dashed border-line p-4 text-sm text-ink-soft">
-              Payment isn&apos;t connected yet. Orders placed now are recorded as demo orders and nobody is charged.
+            <p className="mt-1 text-sm text-ink-soft">
+              After you place your order, we&apos;ll show you where to send payment and email you the details. Orders ship
+              once payment is received, and unpaid orders are cancelled after {site.paymentWindowHours} hours.
             </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {paymentMethods.map((m) => (
+                <label
+                  key={m}
+                  className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 text-sm font-semibold transition ${
+                    paymentMethod === m ? "border-accent bg-accent-tint text-accent-strong" : "border-line hover:border-ink-soft"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    className="h-4 w-4 accent-accent"
+                    checked={paymentMethod === m}
+                    onChange={() => setPaymentMethod(m)}
+                  />
+                  {paymentLabels[m]}
+                </label>
+              ))}
+            </div>
           </section>
         </div>
 

@@ -26,10 +26,19 @@ export const attestations = [
 
 export type AttestationKey = (typeof attestations)[number]["key"];
 
+export const paymentMethods = ["venmo", "zelle"] as const;
+export type PaymentMethod = (typeof paymentMethods)[number];
+export const paymentLabels: Record<PaymentMethod, string> = { venmo: "Venmo", zelle: "Zelle" };
+
+export function isPaymentMethod(v: unknown): v is PaymentMethod {
+  return paymentMethods.includes(v as PaymentMethod);
+}
+
 export type CheckoutRequest = {
   customer: Customer;
   lines: CartLine[];
   attestations: Record<AttestationKey, boolean>;
+  paymentMethod: PaymentMethod;
 };
 
 export const US_STATES =

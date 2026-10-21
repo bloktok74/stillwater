@@ -31,9 +31,9 @@ Everything in `config/prices.ts` is sent to the browser, so never put supplier c
 - [ ] Check every spec and blend composition in `lib/catalog.ts` against your supplier's COAs (the GLOW/KLOW blends are marked TODO).
 - [ ] Make the home page's quality claims true (independent HPLC/MS testing, lot-matched COAs) or edit them. Unbacked claims are an FTC problem.
 - [ ] Have an attorney review `lib/legal.ts` and fill in the `[PLACEHOLDERS]`.
-- [ ] Connect payments in `app/api/checkout/route.ts`. Stripe, Shopify Payments, PayPal and Square prohibit RUO peptides, so you will need a high-risk merchant account.
-- [ ] Persist orders and attestation records (timestamp, IP, attestation text) in a database.
-- [ ] Add order confirmation emails.
+- [ ] Set your Venmo and Zelle handles in `config/site.ts` (`payments`). A method left `null` is refused on the live site.
+- [ ] Set up order emails: create a Resend account, verify the domain, and set the variables from `.env.example` in your host. Until these are set, the live site refuses orders instead of losing them.
+- [ ] Use a Venmo Business profile and a business bank account for Zelle, and review both providers' terms for this product category.
 - [ ] Replace the placeholder vial art with real product photos.
 
 ## Compliance rules the site follows (keep it this way)

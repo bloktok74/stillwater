@@ -1,5 +1,6 @@
 import { site } from "@/config/site";
-import { attestations, US_STATES, type CheckoutRequest, type Customer } from "@/lib/checkout";
+import { attestations, isPaymentMethod, US_STATES, type CheckoutRequest, type Customer } from "@/lib/checkout";
+import { emailConfigured, sendOrderEmails, type Order } from "@/lib/orderEmail";
 import { priceCart } from "@/lib/pricing";
 
 const fail = (error: string, status = 400) => Response.json({ error }, { status });
@@ -41,13 +42,33 @@ export async function POST(req: Request) {
   const cart = priceCart(lines.filter((l) => typeof l?.variantId === "string"));
   if (cart.lines.length === 0) return fail("Your cart has no purchasable items.");
 
-  const orderId = `${site.orderPrefix}-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
+  const paymentMethod = body.paymentMethod;
+  if (!isPaymentMethod(paymentMethod)) return fail("Please choose Venmo or Zelle.");
 
-  // TODO before launch:
-  //  1. Persist the order + attestation record (timestamp, IP, attestation text) in a database.
-  //  2. Create a payment session with your processor and return its redirect URL.
-  //  3. Send a confirmation email.
-  console.info("[demo order]", orderId, { items: cart.lines.length, totalCents: cart.totalCents, state: customer.state });
+  // On the live site, refuse orders rather than lose them if setup is incomplete.
+  const live = process.env.NODE_ENV === "production";
+  if (live && !site.payments[paymentMethod]) return fail("That payment method isn't available right now.");
+  if (live && !emailConfigured()) return fail("Online ordering isn't open yet. Please check back soon.", 503);
 
-  return Response.json({ orderId, totalCents: cart.totalCents, demo: true });
+  const order: Order = {
+    id: `${site.orderPrefix}-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`,
+    placedAt: new Date().toISOString(),
+    ip: req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown",
+    customer,
+    paymentMethod,
+    cart,
+  };
+
+  if (emailConfigured()) {
+    try {
+      await sendOrderEmails(order);
+    } catch (err) {
+      console.error("[order email failed]", order.id, err);
+      return fail("We couldn't place your order. Please try again in a moment.", 502);
+    }
+  } else {
+    console.info("[dev order: email not configured]", order.id, { totalCents: cart.totalCents, paymentMethod });
+  }
+
+  return Response.json({ orderId: order.id, totalCents: cart.totalCents, paymentMethod });
 }

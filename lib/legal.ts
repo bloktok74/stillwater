@@ -54,6 +54,7 @@ export const legalDocs: Record<string, LegalDoc> = {
         body: [
           "Placing an order is an offer to buy. We may accept, decline or cancel any order at our discretion, including after payment, in which case we will issue a full refund.",
           "Prices are in U.S. dollars and may change without notice. Price or product errors may be corrected even after an order has been placed.",
+          `We accept payment by Venmo or Zelle only. After you place an order we provide payment instructions; include your order number in the payment note. Orders ship once payment is received and verified, and orders not paid within ${site.paymentWindowHours} hours are cancelled.`,
         ],
       },
       {
@@ -125,7 +126,7 @@ export const legalDocs: Record<string, LegalDoc> = {
       {
         heading: "What we collect",
         body: [
-          "When you order, we collect your name, email, shipping address, organization (if provided) and order details. Payments are handled by our payment processor; we do not store full card numbers.",
+          "When you order, we collect your name, email, shipping address, organization (if provided) and order details. We do not collect card or bank details: payments are made directly through Venmo or Zelle, whose own privacy policies apply.",
           "Your browser stores your cart and your research-use confirmation locally. We do not use this local storage to track you across other sites.",
         ],
       },

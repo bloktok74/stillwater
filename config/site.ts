@@ -13,4 +13,10 @@ export const site = {
   flatShippingCents: 1500,
   freeShippingThresholdCents: 20000,
   maxQtyPerLine: 20,
+  // Shown to customers after they place an order. null = method not offered on the live site.
+  payments: {
+    venmo: null as string | null, // Venmo Business handle, e.g. "@your-handle"
+    zelle: null as string | null, // email or phone registered with Zelle
+  },
+  paymentWindowHours: 48,
 };
