@@ -27,7 +27,7 @@ export default async function ProductPage({ params }: Params) {
     ["Molecular formula", product.formula],
     ["Molecular weight", product.molecularWeight],
     ["Form", product.form],
-    ["Purity", "See batch certificate of analysis"],
+    ["Documentation", "Batch documentation on request"],
     ["Storage", product.storage],
   ];
 
@@ -89,13 +89,13 @@ export default async function ProductPage({ params }: Params) {
             </section>
           )}
           <section>
-            <h2 className="text-lg font-semibold">Certificate of analysis</h2>
+            <h2 className="text-lg font-semibold">Batch documentation</h2>
             <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-              Each lot is independently tested by HPLC and mass spectrometry. Email{" "}
-              <a href={`mailto:${site.supportEmail}?subject=COA request: ${product.name}`} className="text-accent underline">
+              Reference batch documentation is available on request. Email{" "}
+              <a href={`mailto:${site.supportEmail}?subject=Documentation request: ${product.name}`} className="text-accent underline">
                 {site.supportEmail}
               </a>{" "}
-              with the lot number on your vial to receive its COA.
+              with the product name and your order number.
             </p>
           </section>
         </div>

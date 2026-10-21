@@ -5,7 +5,7 @@ export const site = {
   nameSuffix: "Peptides",
   orderPrefix: "SW",
   domain: "stillwaterpeptides.com",
-  tagline: "Analytically verified peptides for laboratory research",
+  tagline: "Lyophilized peptides for laboratory research",
   // TODO: set up this mailbox (or change it) before launch.
   supportEmail: "support@stillwaterpeptides.com",
   minAge: 21,

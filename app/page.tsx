@@ -6,11 +6,12 @@ import { getProduct, products } from "@/lib/catalog";
 
 const featured = ["bpc-157", "tb-500", "ghk-cu", "wolverine-blend"].map((s) => getProduct(s)!).filter(Boolean);
 
+// Keep these claims in line with what the supplier documents. Don't add testing claims without COAs in hand.
 const pillars = [
-  { title: "HPLC & mass spec", body: "Every batch is tested for purity and identity by an independent laboratory before release." },
-  { title: "Batch-level COAs", body: "Certificates of analysis are matched to the lot number printed on each vial." },
-  { title: "Lyophilized & sealed", body: "Freeze-dried for stability and sealed under inert conditions." },
-  { title: "Ships from the U.S.", body: "Discreet, protective packaging with tracking on every order." },
+  { title: "Batch documentation", body: "Reference batch documentation is available on request." },
+  { title: "Lyophilized & sealed", body: "Freeze-dried for stability and supplied in sealed vials." },
+  { title: "Fast U.S. shipping", body: "Orders placed before 6 PM ET ship the same business day. Delivery typically takes 1–3 business days." },
+  { title: "Tracked delivery", body: "Protective packaging with tracking on every order." },
 ];
 
 const faqs = [
@@ -26,7 +27,10 @@ const faqs = [
     q: "Where do you ship, and how fast?",
     a: `We ship within the ${site.shipsTo} only. Orders placed before 6 PM ET on a business day ship the same day, and delivery typically takes 1–3 business days.`,
   },
-  { q: "Can I see a certificate of analysis?", a: `Yes. Email ${site.supportEmail} with the product and lot number and we'll send its COA.` },
+  {
+    q: "Can I see batch documentation?",
+    a: `Reference batch documentation is available on request. Email ${site.supportEmail} with the product name and your order number.`,
+  },
 ];
 
 export default function Home() {
@@ -37,18 +41,18 @@ export default function Home() {
           <div>
             <p className="text-sm font-semibold uppercase tracking-widest text-accent">Research peptides</p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-              Purity you can verify, batch by batch.
+              Research peptides, shipped fast.
             </h1>
             <p className="mt-5 max-w-lg text-lg text-ink-soft">
-              {site.name} supplies lyophilized peptides to laboratories, with third-party analysis and a certificate of
-              analysis for every lot.
+              {site.name} supplies lyophilized peptides, blends and reagents to laboratories across the U.S., with batch
+              documentation available on request.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/shop" className="btn">
                 Browse {products.length} compounds
               </Link>
-              <Link href="#quality" className="btn-outline">
-                Our testing
+              <Link href="#why" className="btn-outline">
+                Why Stillwater
               </Link>
             </div>
           </div>
@@ -74,9 +78,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="quality" className="scroll-mt-20 border-y border-line bg-ink text-white">
+      <section id="why" className="scroll-mt-20 border-y border-line bg-ink text-white">
         <div className="container-x py-16">
-          <h2 className="text-2xl font-semibold tracking-tight">How we verify every batch</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Why researchers choose {site.shortName}</h2>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {pillars.map((p, i) => (
               <div key={p.title} className="rounded-xl border border-white/10 bg-white/5 p-5">

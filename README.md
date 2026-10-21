@@ -29,7 +29,7 @@ Everything in `config/prices.ts` is sent to the browser, so never put supplier c
 - [ ] Create the support@stillwaterpeptides.com mailbox (set in `config/site.ts`).
 - [ ] Fill in `config/prices.ts`.
 - [ ] Check every spec and blend composition in `lib/catalog.ts` against your supplier's COAs (the GLOW/KLOW blends are marked TODO).
-- [ ] Make the home page's quality claims true (independent HPLC/MS testing, lot-matched COAs) or edit them. Unbacked claims are an FTC problem.
+- [ ] Quality claims currently match the supplier ("batch documentation on request"). Only add HPLC / mass spec / third-party testing claims once you have COAs for each lot. Unbacked claims are an FTC problem.
 - [ ] Have an attorney review `lib/legal.ts` and fill in the `[PLACEHOLDERS]`.
 - [ ] Set your Venmo and Zelle handles in `config/site.ts` (`payments`). A method left `null` is refused on the live site.
 - [ ] Set up order emails: create a Resend account, verify the domain, and set the variables from `.env.example` in your host. Until these are set, the live site refuses orders instead of losing them.
